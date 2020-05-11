@@ -45,7 +45,10 @@ def get_uniaxial_load_cases(total_times, num_increments, directions,
             )
         )
 
-    return all_load_cases
+    out = {
+        'load_case': all_load_cases,
+    }
+    return out
 
 
 @func_mapper(task='generate_load_case', method='biaxial')
@@ -78,7 +81,10 @@ def get_biaxial_load_cases(total_times, num_increments, directions,
             )
         )
 
-    return all_load_cases
+    out = {
+        'load_case': all_load_cases,
+    }
+    return out
 
 
 @func_mapper(task='generate_load_case', method='plane_strain')
@@ -108,7 +114,10 @@ def get_plane_strain_load_cases(total_times, num_increments, directions,
             )
         )
 
-    return all_load_cases
+    out = {
+        'load_case': all_load_cases,
+    }
+    return out
 
 
 @func_mapper(task='generate_load_case', method='random_2D')
@@ -138,7 +147,10 @@ def get_random_2D_load_cases(total_times, num_increments, normal_directions,
             )
         )
 
-    return all_load_cases
+    out = {
+        'load_case': all_load_cases,
+    }
+    return out
 
 
 @func_mapper(task='generate_load_case', method='random_3D')
@@ -168,4 +180,7 @@ def get_random_3D_load_cases(total_times, num_increments, target_strains, rotati
             )
         )
 
-    return all_load_cases
+    out = {
+        'load_case': all_load_cases,
+    }
+    return out
