@@ -6,4 +6,12 @@ from matflow_formable import (
     cli_format_mapper,
     register_output_file,
     func_mapper,
+    software_versions,
 )
+
+from formable import __version__ as formable_version
+
+
+@software_versions()
+def get_versions():
+    return {'formable (Python)': {'version': formable_version}}
