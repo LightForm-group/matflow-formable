@@ -11,6 +11,8 @@ from matflow_formable import (
 
 from formable import __version__ as formable_version
 from formable.load_response import LoadResponse, LoadResponseSet
+    
+    
 
 
 @func_mapper(task='fit_yield_function', method='formable')
@@ -33,17 +35,10 @@ def fit_yield_function(yield_function_name, yield_point_criteria, uniaxial_respo
     response_set = LoadResponseSet(multi_resp)
     response_set.calculate_yield_stresses(yield_point_criteria)
     response_set.fit_yield_function(yield_function_name, uniaxial_response=uni_resp)
-    out = {
-        'fitted_yield_functions': [
-            {
-                'name': yield_function_name,
-                **i['yield_function'].get_parameters()
-            }
-            for i in response_set.yield_functions
-        ]
-    }
-
-    return out
+    
+    print('outputs: .yield_functions, .yield_stresses, .show_yield_functions_2D(), .show_yield_functions_3D()')
+    
+    return response_set
 
 
 @software_versions()
