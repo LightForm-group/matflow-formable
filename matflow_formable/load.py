@@ -15,7 +15,7 @@ from matflow_formable import (
 @func_mapper(task='generate_load_case', method='uniaxial')
 def get_uniaxial_load_cases(total_times, num_increments, directions,
                             target_strain_rates=None, target_strains=None,
-                            rotations=None):
+                            rotations=None, dump_frequency=1):
 
     if target_strains is None:
         target_strains = [None] * len(total_times)
@@ -42,18 +42,19 @@ def get_uniaxial_load_cases(total_times, num_increments, directions,
                 target_strain_rate=eps_dot,
                 target_strain=eps,
                 rotation=rot,
+                dump_frequency=dump_frequency,
             )
         )
 
-    out = {
-        'load_case': all_load_cases,
-    }
+    out = {'load_case': all_load_cases}
+
     return out
 
 
 @func_mapper(task='generate_load_case', method='biaxial')
 def get_biaxial_load_cases(total_times, num_increments, directions,
-                           target_strain_rates=None, target_strains=None):
+                           target_strain_rates=None, target_strains=None,
+                           dump_frequency=1):
 
     if target_strains is None:
         target_strains = [None] * len(total_times)
@@ -78,6 +79,7 @@ def get_biaxial_load_cases(total_times, num_increments, directions,
                 direction=d,
                 target_strain_rate=eps_dot,
                 target_strain=eps,
+                dump_frequency=dump_frequency,
             )
         )
 
@@ -89,7 +91,8 @@ def get_biaxial_load_cases(total_times, num_increments, directions,
 
 @func_mapper(task='generate_load_case', method='plane_strain')
 def get_plane_strain_load_cases(total_times, num_increments, directions,
-                                target_strain_rates=None, target_strains=None):
+                                target_strain_rates=None, target_strains=None,
+                                dump_frequency=1):
 
     if target_strains is None:
         target_strains = [None] * len(total_times)
@@ -111,6 +114,7 @@ def get_plane_strain_load_cases(total_times, num_increments, directions,
                 direction=d,
                 target_strain_rate=eps_dot,
                 target_strain=eps,
+                dump_frequency=dump_frequency,
             )
         )
 
@@ -122,7 +126,8 @@ def get_plane_strain_load_cases(total_times, num_increments, directions,
 
 @func_mapper(task='generate_load_case', method='random_2D')
 def get_random_2D_load_cases(total_times, num_increments, normal_directions,
-                             target_strain_rates=None, target_strains=None):
+                             target_strain_rates=None, target_strains=None,
+                             dump_frequency=1):
 
     if target_strains is None:
         target_strains = [None] * len(total_times)
@@ -144,6 +149,7 @@ def get_random_2D_load_cases(total_times, num_increments, normal_directions,
                 normal_direction=nd,
                 target_strain_rate=eps_dot,
                 target_strain=eps,
+                dump_frequency=dump_frequency,
             )
         )
 
@@ -156,7 +162,7 @@ def get_random_2D_load_cases(total_times, num_increments, normal_directions,
 @func_mapper(task='generate_load_case', method='random_3D')
 def get_random_3D_load_cases(total_times, num_increments, target_strains, rotation=True,
                              rotation_max_angle=10, rotation_load_case=True,
-                             non_random_rotation=None):
+                             non_random_rotation=None, dump_frequency=1):
 
     if non_random_rotation is None:
         non_random_rotation = [None] * len(total_times)
@@ -177,6 +183,7 @@ def get_random_3D_load_cases(total_times, num_increments, target_strains, rotati
                 rotation_max_angle=rotation_max_angle,
                 rotation_load_case=rotation_load_case,
                 non_random_rotation=rot,
+                dump_frequency=dump_frequency,
             )
         )
 
