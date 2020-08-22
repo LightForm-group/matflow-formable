@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.4] - 2020.08.22
+
+### Fixed
+
+- Allow different dump frequencies for each load case.
+
 ## [0.1.3] - 2020.08.22
 
 ### Changed
