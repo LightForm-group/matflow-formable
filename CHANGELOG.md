@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Add `dump_frequency` to load case generators
+- Add `dump_frequency` to load case generators.
 
 ## [0.1.2] - 2020.06.09
 
