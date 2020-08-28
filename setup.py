@@ -59,8 +59,7 @@ setup(
     """,
     install_requires=[
         'matflow',
-        'formable',
-        'numpy',
+        'hickle>=4.0.1',
     ],
     license="MIT license",
     long_description=get_long_description() + '\n\n' + get_changelog(),

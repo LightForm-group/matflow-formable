@@ -1,51 +1,46 @@
 '`matflow_formable.main.py`'
 
-from matflow_formable import (
-    input_mapper,
-    output_mapper,
-    cli_format_mapper,
-    register_output_file,
-    func_mapper,
-    software_versions,
-)
+import hickle
+from matflow.scripting import get_wrapper_script
 
-from formable import __version__ as formable_version
-from formable.load_response import LoadResponse, LoadResponseSet
+from matflow_formable import input_mapper, output_mapper, sources_mapper
 
 
-@func_mapper(task='fit_yield_function', method='formable')
-def fit_yield_function(yield_function_name, yield_point_criteria, uniaxial_response,
-                       multiaxial_responses):
-
-    # Generate LoadResponse objects:
-    uni_resp = LoadResponse(
-        true_stress=uniaxial_response['vol_avg_stress'],
-        equivalent_plastic_strain=uniaxial_response['vol_avg_equivalent_plastic_strain'],
-    )
-    multi_resp = []
-    for resp_dat in multiaxial_responses:
-        multi_resp.append(
-            LoadResponse(
-                true_stress=resp_dat['vol_avg_stress'],
-                equivalent_plastic_strain=resp_dat['vol_avg_equivalent_plastic_strain'],
-            )
-        )
-    response_set = LoadResponseSet(multi_resp)
-    response_set.calculate_yield_stresses(yield_point_criteria)
-    response_set.fit_yield_function(yield_function_name, uniaxial_response=uni_resp)
-    out = {
-        'fitted_yield_functions': [
-            {
-                'name': yield_function_name,
-                **i['yield_function'].get_parameters()
-            }
-            for i in response_set.yield_functions
-        ]
+@input_mapper(input_file='inputs.hdf5', task='fit_yield_function', method='least_squares')
+def write_fit_yield_function_param_file(path, yield_function_name, yield_point_criteria,
+                                        uniaxial_response, multiaxial_responses):
+    kwargs = {
+        'yield_function_name': yield_function_name,
+        'yield_point_criteria': yield_point_criteria,
+        'uniaxial_response': uniaxial_response,
+        'multiaxial_responses': multiaxial_responses,
     }
+    hickle.dump(kwargs, path)
 
+
+@output_mapper(
+    output_name='fitted_yield_functions',
+    task='fit_yield_function',
+    method='least_squares',
+)
+def read_fitted_yield_functions(path):
+    return hickle.load(path)
+
+
+@sources_mapper(
+    task='fit_yield_function',
+    method='least_squares',
+    script='fit_yield_function',
+)
+def fit_yield_function():
+
+    script_name = 'fit_yield_function.py'
+    snippets = [{'name': 'fit_yield_function.py'}]
+    outputs = ['fitted_yield_functions']
+    out = {
+        'script': {
+            'content': get_wrapper_script(__package__, script_name, snippets, outputs),
+            'filename': script_name,
+        }
+    }
     return out
-
-
-@software_versions()
-def get_versions():
-    return {'formable (Python)': {'version': formable_version}}

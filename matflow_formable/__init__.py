@@ -9,7 +9,7 @@ from matflow.extensions import (
     output_mapper,
     cli_format_mapper,
     register_output_file,
-    func_mapper,
+    sources_mapper,
     software_versions
 )
 
@@ -19,7 +19,7 @@ input_mapper = partial(input_mapper, software=SOFTWARE)
 output_mapper = partial(output_mapper, software=SOFTWARE)
 cli_format_mapper = partial(cli_format_mapper, software=SOFTWARE)
 register_output_file = partial(register_output_file, software=SOFTWARE)
-func_mapper = partial(func_mapper, software=SOFTWARE)
+sources_mapper = partial(sources_mapper, software=SOFTWARE)
 software_versions = partial(software_versions, software=SOFTWARE)
 
 # This import must come after assigning the partial functions:
