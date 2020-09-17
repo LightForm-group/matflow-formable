@@ -4,7 +4,7 @@ from matflow.scripting import main_func
 
 @main_func
 def fit_yield_function(yield_function_name, yield_point_criteria, uniaxial_response,
-                       multiaxial_responses):
+                       multiaxial_responses, fixed_parameters):
 
     # Generate LoadResponse objects:
     uni_resp = LoadResponse(
@@ -21,7 +21,11 @@ def fit_yield_function(yield_function_name, yield_point_criteria, uniaxial_respo
         )
     response_set = LoadResponseSet(multi_resp)
     response_set.calculate_yield_stresses(yield_point_criteria)
-    response_set.fit_yield_function(yield_function_name, uniaxial_response=uni_resp)
+    response_set.fit_yield_function(
+        yield_function_name,
+        uniaxial_response=uni_resp,
+        **(fixed_parameters or {}),
+    )
     fitted_yield_functions = [
         {
             'name': yield_function_name,

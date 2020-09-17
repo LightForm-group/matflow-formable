@@ -8,12 +8,14 @@ from matflow_formable import input_mapper, output_mapper, sources_mapper
 
 @input_mapper(input_file='inputs.hdf5', task='fit_yield_function', method='least_squares')
 def write_fit_yield_function_param_file(path, yield_function_name, yield_point_criteria,
-                                        uniaxial_response, multiaxial_responses):
+                                        uniaxial_response, multiaxial_responses,
+                                        fixed_parameters):
     kwargs = {
         'yield_function_name': yield_function_name,
         'yield_point_criteria': yield_point_criteria,
         'uniaxial_response': uniaxial_response,
         'multiaxial_responses': multiaxial_responses,
+        'fixed_parameters': fixed_parameters,
     }
     hickle.dump(kwargs, path)
 
