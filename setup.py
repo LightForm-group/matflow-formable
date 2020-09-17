@@ -67,6 +67,7 @@ setup(
     keywords='matflow, materials-science, computational-workflow',
     name='matflow-formable',
     packages=find_packages(),
+    package_data={'': ['snippets/*.py']},
     project_urls={
         'GitHub': 'https://github.com/LightForm-group/matflow-formable'
     },
