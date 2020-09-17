@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.5] - 2020.09.17
+
+### Added
+
+- Add `fixed_parameters` option for yield function fitting.
+
 ## [0.1.4] - 2020.08.22
 
 ### Fixed
