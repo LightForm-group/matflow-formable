@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.7] - 2020.12.16
+
+### Added
+
+- Add support for task: `get_tensile_test` using method `from_CSV`.
+- Add support for task: `optimise_single_crystal_parameters` using method `levenberg_marquardt`.
+
 ## [0.1.6] - 2020.09.17
 
 ### Fixed
