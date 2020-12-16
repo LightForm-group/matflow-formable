@@ -46,3 +46,103 @@ def fit_yield_function():
         }
     }
     return out
+
+
+@input_mapper(input_file='inputs.hdf5', task='get_tensile_test', method='from_CSV')
+def write_get_tensile_test_param_file(path, CSV_file_path, CSV_arguments,
+                                      eng_stress_col_index, eng_strain_col_index,
+                                      true_stress_col_index, true_strain_col_index,
+                                      stress_units):
+    kwargs = {
+        'CSV_file_path': CSV_file_path,
+        'CSV_arguments': CSV_arguments,
+        'eng_stress_col_index': eng_stress_col_index,
+        'eng_strain_col_index': eng_strain_col_index,
+        'true_stress_col_index': true_stress_col_index,
+        'true_strain_col_index': true_strain_col_index,
+        'stress_units': stress_units,
+    }
+    hickle.dump(kwargs, path)
+
+
+@output_mapper(
+    output_name='tensile_test',
+    task='get_tensile_test',
+    method='from_CSV',
+)
+def read_loaded_tensile_tests(path):
+    return hickle.load(path)
+
+
+@sources_mapper(
+    task='get_tensile_test',
+    method='from_CSV',
+    script='get_tensile_test',
+)
+def get_tensile_test():
+
+    script_name = 'get_tensile_test.py'
+    snippets = [{'name': 'read_tensile_test_CSV.py'}]
+    outputs = ['tensile_test']
+    out = {
+        'script': {
+            'content': get_wrapper_script(__package__, script_name, snippets, outputs),
+            'filename': script_name,
+        }
+    }
+    return out
+
+
+@input_mapper(
+    input_file='inputs.hdf5',
+    task='optimise_single_crystal_parameters',
+    method='levenberg_marquardt'
+)
+def write_opt_SC_params_LM_file(path, single_crystal_parameters, 
+                                single_crystal_parameter_perturbations, 
+                                perturbed_volume_element_responses,
+                                experimental_tensile_test, initial_damping):
+    kwargs = {
+        'single_crystal_parameters': single_crystal_parameters,
+        'single_crystal_parameter_perturbations': single_crystal_parameter_perturbations,
+        'perturbed_volume_element_responses': perturbed_volume_element_responses,        
+        'experimental_tensile_test': experimental_tensile_test,
+        'initial_damping': initial_damping,
+    }
+    hickle.dump(kwargs, path)
+
+
+@output_mapper(
+    output_name='single_crystal_parameters',
+    task='optimise_single_crystal_parameters',
+    method='levenberg_marquardt',
+)
+def read_optimised_SC_params_LM_1(path):
+    return hickle.load(path)['single_crystal_parameters']
+
+
+@output_mapper(
+    output_name='levenberg_marquardt_fitter',
+    task='optimise_single_crystal_parameters',
+    method='levenberg_marquardt',
+)
+def read_optimised_SC_params_LM_2(path):
+    return hickle.load(path)['levenberg_marquardt_fitter']
+
+@sources_mapper(
+    task='optimise_single_crystal_parameters',
+    method='levenberg_marquardt',
+    script='optimise_SC_parameters_LM',
+)
+def optimise_single_crystal_parameters_LM():
+
+    script_name = 'optimise_SC_parameters_LM.py'
+    snippets = [{'name': 'optimise_SC_parameters_LM.py'}]
+    outputs = ['outputs']
+    out = {
+        'script': {
+            'content': get_wrapper_script(__package__, script_name, snippets, outputs),
+            'filename': script_name,
+        }
+    }
+    return out
