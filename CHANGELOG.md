@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.8] - 2021.04.10
+
+### Changed
+
+- Support `initial_parameters` and `opt_parameters` (i.e. optimisation parameters, including specifying bounds on yield function fitting).
+
 ## [0.1.7] - 2020.12.16
 
 ### Added
