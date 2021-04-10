@@ -98,14 +98,14 @@ def get_tensile_test():
     task='optimise_single_crystal_parameters',
     method='levenberg_marquardt'
 )
-def write_opt_SC_params_LM_file(path, single_crystal_parameters, 
-                                single_crystal_parameter_perturbations, 
+def write_opt_SC_params_LM_file(path, single_crystal_parameters,
+                                single_crystal_parameter_perturbations,
                                 perturbed_volume_element_responses,
                                 experimental_tensile_test, initial_damping):
     kwargs = {
         'single_crystal_parameters': single_crystal_parameters,
         'single_crystal_parameter_perturbations': single_crystal_parameter_perturbations,
-        'perturbed_volume_element_responses': perturbed_volume_element_responses,        
+        'perturbed_volume_element_responses': perturbed_volume_element_responses,
         'experimental_tensile_test': experimental_tensile_test,
         'initial_damping': initial_damping,
     }
