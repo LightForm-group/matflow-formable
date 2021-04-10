@@ -129,6 +129,7 @@ def read_optimised_SC_params_LM_1(path):
 def read_optimised_SC_params_LM_2(path):
     return hickle.load(path)['levenberg_marquardt_fitter']
 
+
 @sources_mapper(
     task='optimise_single_crystal_parameters',
     method='levenberg_marquardt',
