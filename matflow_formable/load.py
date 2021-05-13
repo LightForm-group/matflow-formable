@@ -101,13 +101,14 @@ def write_load_case_uniaxial_param_file(path, total_times, num_increments, direc
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='biaxial')
 def write_load_case_biaxial_param_file(path, total_times, num_increments, directions,
                                        target_strain_rates, target_strains,
-                                       dump_frequency):
+                                       rotations, dump_frequency):
     kwargs = {
         'total_times': total_times,
         'num_increments': num_increments,
         'directions': directions,
         'target_strain_rates': target_strain_rates,
         'target_strains': target_strains,
+        'rotations': rotations,
         'dump_frequency': dump_frequency,
     }
     hickle.dump(kwargs, path)
@@ -116,13 +117,14 @@ def write_load_case_biaxial_param_file(path, total_times, num_increments, direct
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='plane_strain')
 def write_load_case_plane_strain_param_file(path, total_times, num_increments, directions,
                                             target_strain_rates, target_strains,
-                                            dump_frequency):
+                                            rotations, dump_frequency):
     kwargs = {
         'total_times': total_times,
         'num_increments': num_increments,
         'directions': directions,
         'target_strain_rates': target_strain_rates,
         'target_strains': target_strains,
+        'rotations': rotations,
         'dump_frequency': dump_frequency,
     }
     hickle.dump(kwargs, path)
