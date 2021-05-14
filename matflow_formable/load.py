@@ -51,6 +51,22 @@ def get_load_case_plane_strain():
     }
     return out
 
+@sources_mapper(task='generate_load_case', method='planar_2D',
+                script='get_load_case_planar_2D')
+def get_load_case_planar_2D():
+
+    script_name = 'get_load_case_planar_2D.py'
+    snippets = [{'name': 'get_load_case_planar_2D.py'}]
+    outputs = ['load_case']
+    out = {
+        'script': {
+            'content': get_wrapper_script(__package__, script_name, snippets, outputs),
+            'filename': script_name,
+        }
+    }
+    return out
+
+
 @sources_mapper(task='generate_load_case', method='random_2D',
                 script='get_load_case_random_2D')
 def get_load_case_random_2D():
@@ -130,6 +146,22 @@ def write_load_case_plane_strain_param_file(path, total_times, num_increments, d
     hickle.dump(kwargs, path)
 
 
+@input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='planar_2D')
+def write_load_case_planar_2D_param_file(path, total_times, num_increments,
+                                         normal_directions, target_strain_rates,
+                                         target_strains, rotations, dump_frequency):
+    kwargs = {
+        'total_times': total_times,
+        'num_increments': num_increments,
+        'normal_directions': normal_directions,
+        'target_strain_rates': target_strain_rates,
+        'target_strains': target_strains,
+        'rotations': rotations,
+        'dump_frequency': dump_frequency,
+    }
+    hickle.dump(kwargs, path)
+
+
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='random_2D')
 def write_load_case_random_2D_param_file(path, total_times, num_increments,
                                          normal_directions, target_strain_rates,
@@ -167,6 +199,7 @@ def write_load_case_random_3D_param_file(path, total_times, num_increments,
 @output_mapper(output_name='load_case', task='generate_load_case', method='uniaxial')
 @output_mapper(output_name='load_case', task='generate_load_case', method='biaxial')
 @output_mapper(output_name='load_case', task='generate_load_case', method='plane_strain')
+@output_mapper(output_name='load_case', task='generate_load_case', method='planar_2D')
 @output_mapper(output_name='load_case', task='generate_load_case', method='random_2D')
 @output_mapper(output_name='load_case', task='generate_load_case', method='random_3D')
 def read_load_case(path):
