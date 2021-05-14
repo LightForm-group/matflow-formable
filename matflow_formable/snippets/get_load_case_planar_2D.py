@@ -29,7 +29,7 @@ def get_load_case_planar_2D(total_times, num_increments, normal_directions,
         dump_frequency,
     ):
         all_load_cases.append(
-            load_cases.get_load_case_plane_strain(
+            load_cases.get_load_case_planar_2D(
                 total_time=t,
                 num_increments=n,
                 normal_direction=nd,
