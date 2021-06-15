@@ -30,15 +30,15 @@ def fit_yield_function(yield_function_name, yield_point_criteria, uniaxial_respo
 
     # Generate LoadResponse objects:
     uni_resp = LoadResponse(
-        true_stress=uniaxial_response['vol_avg_stress']['data'],
-        equivalent_plastic_strain=uniaxial_response['vol_avg_equivalent_plastic_strain']['data'],
+        true_stress=uniaxial_response['volume_data']['vol_avg_stress']['data'],
+        equivalent_plastic_strain=uniaxial_response['volume_data']['vol_avg_equivalent_plastic_strain']['data'],
     )
     multi_resp = []
     for resp_dat in multiaxial_responses:
         multi_resp.append(
             LoadResponse(
-                true_stress=resp_dat['vol_avg_stress']['data'],
-                equivalent_plastic_strain=resp_dat['vol_avg_equivalent_plastic_strain']['data'],
+                true_stress=resp_dat['volume_data']['vol_avg_stress']['data'],
+                equivalent_plastic_strain=resp_dat['volume_data']['vol_avg_equivalent_plastic_strain']['data'],
             )
         )
     response_set = LoadResponseSet(multi_resp)
