@@ -59,11 +59,10 @@ def optimise_SC_parameters_LM(single_crystal_parameters,
 
         tensile_tests = []
         for vol_elem_resp in all_vol_elem_resp:
+            true_stress = vol_elem_resp['volume_data']['vol_avg_equivalent_stress']['data']
+            true_strain = vol_elem_resp['volume_data']['vol_avg_equivalent_strain']['data']
             tensile_tests.append(
-                TensileTest(
-                    true_stress=vol_elem_resp['vol_avg_equivalent_stress']['data'],
-                    true_strain=vol_elem_resp['vol_avg_equivalent_strain']['data'],
-                )
+                TensileTest(true_stress=true_stress, true_strain=true_strain)
         )
 
         # Need to reorder if null-perturbation is not first:
