@@ -21,6 +21,7 @@ def get_load_case_uniaxial():
     }
     return out
 
+
 @sources_mapper(task='generate_load_case', method='biaxial',
                 script='get_load_case_biaxial')
 def get_load_case_biaxial():
@@ -35,6 +36,7 @@ def get_load_case_biaxial():
         }
     }
     return out
+
 
 @sources_mapper(task='generate_load_case', method='plane_strain',
                 script='get_load_case_plane_strain')
@@ -51,6 +53,7 @@ def get_load_case_plane_strain():
     }
     return out
 
+
 @sources_mapper(task='generate_load_case', method='random_2D',
                 script='get_load_case_random_2D')
 def get_load_case_random_2D():
@@ -65,6 +68,7 @@ def get_load_case_random_2D():
         }
     }
     return out
+
 
 @sources_mapper(task='generate_load_case', method='random_3D',
                 script='get_load_case_random_3D')
@@ -116,7 +120,7 @@ def write_load_case_biaxial_param_file(path, total_times, num_increments, direct
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='plane_strain')
 def write_load_case_plane_strain_param_file(path, total_times, num_increments, directions,
                                             target_strain_rates, target_strains,
-                                            dump_frequency):
+                                            dump_frequency, strain_rate_modes):
     kwargs = {
         'total_times': total_times,
         'num_increments': num_increments,
@@ -124,6 +128,7 @@ def write_load_case_plane_strain_param_file(path, total_times, num_increments, d
         'target_strain_rates': target_strain_rates,
         'target_strains': target_strains,
         'dump_frequency': dump_frequency,
+        'strain_rate_modes': strain_rate_modes,
     }
     hickle.dump(kwargs, path)
 

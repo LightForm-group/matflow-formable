@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.9] - 2021.xx.xx
+
+### Added
+
+- Add option `strain_rate_modes` for task `generate_load_case` using method `plane_strain`.
+
 ## [0.1.8] - 2021.04.10
 
 ### Changed
