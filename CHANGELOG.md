@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.10] - 2021.08.07
+
+### Fixed
+
+- Fix extracting RVE data from `volume_element_response` created from recent DAMASK-v3a3 update.
+
 ## [0.1.9] - 2021.08.06
 
 ### Added
