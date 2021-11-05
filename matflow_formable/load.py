@@ -21,6 +21,20 @@ def get_load_case_uniaxial():
     }
     return out
 
+@sources_mapper(task='generate_load_case', method='cyclic_uniaxial',
+                script='get_load_case_uniaxial_cyclic')
+def get_load_case_uniaxial_cyclic():
+
+    script_name = 'get_load_case_uniaxial_cyclic.py'
+    snippets = [{'name': 'get_load_case_uniaxial_cyclic.py'}]
+    outputs = ['load_case']
+    out = {
+        'script': {
+            'content': get_wrapper_script(__package__, script_name, snippets, outputs),
+            'filename': script_name,
+        }
+    }
+    return out
 
 @sources_mapper(task='generate_load_case', method='biaxial',
                 script='get_load_case_biaxial')
@@ -117,6 +131,21 @@ def write_load_case_uniaxial_param_file(path, total_times, num_increments, direc
     hickle.dump(kwargs, path)
 
 
+@input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='cyclic_uniaxial')
+def write_load_case_uniaxial_cyclic_param_file(path, max_stresses, min_stresses,
+                                               cycle_frequencies, num_increments_per_cycle,
+                                               num_cycles, directions):
+    kwargs = {
+        'max_stresses': max_stresses,
+        'min_stresses': min_stresses,
+        'cycle_frequencies': cycle_frequencies,
+        'num_increments_per_cycle': num_increments_per_cycle,
+        'num_cycles': num_cycles,
+        'directions': directions,
+    }
+    hickle.dump(kwargs, path)
+
+
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='biaxial')
 def write_load_case_biaxial_param_file(path, total_times, num_increments, directions,
                                        target_strain_rates, target_strains,
@@ -201,6 +230,7 @@ def write_load_case_random_3D_param_file(path, total_times, num_increments,
 
 
 @output_mapper(output_name='load_case', task='generate_load_case', method='uniaxial')
+@output_mapper(output_name='load_case', task='generate_load_case', method='cyclic_uniaxial')
 @output_mapper(output_name='load_case', task='generate_load_case', method='biaxial')
 @output_mapper(output_name='load_case', task='generate_load_case', method='plane_strain')
 @output_mapper(output_name='load_case', task='generate_load_case', method='planar_2D')
