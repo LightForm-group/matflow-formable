@@ -134,7 +134,7 @@ def write_load_case_uniaxial_param_file(path, total_times, num_increments, direc
 @input_mapper(input_file='inputs.hdf5', task='generate_load_case', method='cyclic_uniaxial')
 def write_load_case_uniaxial_cyclic_param_file(path, max_stresses, min_stresses,
                                                cycle_frequencies, num_increments_per_cycle,
-                                               num_cycles, directions):
+                                               num_cycles, directions, waveforms):
     kwargs = {
         'max_stresses': max_stresses,
         'min_stresses': min_stresses,
@@ -142,6 +142,7 @@ def write_load_case_uniaxial_cyclic_param_file(path, max_stresses, min_stresses,
         'num_increments_per_cycle': num_increments_per_cycle,
         'num_cycles': num_cycles,
         'directions': directions,
+        'waveforms': waveforms,
     }
     hickle.dump(kwargs, path)
 
