@@ -5,6 +5,7 @@
 ### Added
 
 - Add `cyclic_uniaxial` load case method to task `generate_load_case`
+- Add `mixed` load case method to task `generate_load_case`
 
 ## [0.1.10] - 2021.08.07
 
