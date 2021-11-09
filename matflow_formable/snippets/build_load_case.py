@@ -32,12 +32,14 @@ def build_load_case(load_case_specs):
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
+            'keep_singular': [],
         },
         'biaxial': {
             'func': load_cases.get_load_case_biaxial,
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
+            'keep_singular': [],
         },
         'plane_strain': {
             'func': load_cases.get_load_case_plane_strain,
@@ -47,18 +49,21 @@ def build_load_case(load_case_specs):
                 'strain_rate_modes': None,
                 **repeated_defaults,
             },
+            'keep_singular': [],
         },
         'planar_2d': {
             'func': load_cases.get_load_case_planar_2D,
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
+            'keep_singular': [],
         },
         'random_2d': {
             'func': load_cases.get_load_case_random_2D,
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
+            'keep_singular': [],
         },
         'random_3d': {
             'func': load_cases.get_load_case_random_3D,
@@ -68,6 +73,7 @@ def build_load_case(load_case_specs):
                 'non_random_rotation': None,
                 'dump_frequency': 1,
             },
+            'keep_singular': ['rotation', 'rotation_max_angle', 'rotation_load_case'],
         },
         'cyclic_uniaxial': {
             'func': load_cases.get_load_case_uniaxial_cyclic,
@@ -77,6 +83,7 @@ def build_load_case(load_case_specs):
                 'waveforms': 'sine',
                 'dump_frequency': 1,
             },
+            'keep_singular': [],
         },
     }
 
@@ -101,14 +108,12 @@ def build_load_case(load_case_specs):
 
     for lc_spec in load_case_specs:
         
-        lc_type = lc_spec.pop('type')
-        
+        lc_type = lc_spec.pop('type').lower()
+
         if lc_type not in METHOD_INFO:
             msg = (f'Load case type "{lc_type}" unknown. Allowed `type` keys '
                    f'are: {list(METHOD_INFO.keys())}')
             raise ValueError(msg)
-
-        lc_type = lc_type.lower()
 
         method_info_i = METHOD_INFO[lc_type]
         num_cases_i = len(lc_spec[method_info_i['length_identifier']])
@@ -116,10 +121,17 @@ def build_load_case(load_case_specs):
         # Apply defaults: # TODO fix this!
         for def_i_key, def_i_val in method_info_i['defaults'].items():
             if not lc_spec.get(def_i_key):
-                lc_spec.update({def_i_key: [def_i_val] * num_cases_i})
+                if def_i_key in method_info_i['keep_singular']:
+                    lc_spec.update({def_i_key: def_i_val})
+                else:
+                    lc_spec.update({def_i_key: [def_i_val] * num_cases_i})
 
         # Normalise:
-        lc_spec_normed = invert_dict_of_lists(lc_spec, key_map=PLURALS_MAP)
+        lc_spec_normed = invert_dict_of_lists(
+            lc_spec,
+            key_map=PLURALS_MAP,
+            keep_singular=method_info_i['keep_singular'],
+        )
 
         # Generate load cases with `formable`:
         for lc_spec_normed_i in lc_spec_normed:
@@ -133,29 +145,28 @@ def build_load_case(load_case_specs):
 
 
 
-def invert_dict_of_lists(dct, key_map=None):
+def invert_dict_of_lists(dct, key_map=None, keep_singular=None):
     """Convert a dict whose values are lists of equal lengths into a 
     list of dicts whose values are singular. `key_map` is to modify key names."""
     
     if not key_map:
         key_map = {}
+
+    if not keep_singular:
+        keep_singular = []
     
     for key in dct.keys():
         if key not in key_map:
             key_map[key] = key
-
-    num_vals = len(dct[list(dct.keys())[0]])
     
-    new_lst = [
-        dict(zip(
-            [key_map[i] for i in dct.keys()],
-            [None] * len(dct),
-        ))
-        for _ in range(num_vals)
-    ]
+    num_vals = len(dct[[k for k in dct if k not in keep_singular][0]])
+
+    new_lst = [{key_map.get(k, k): None for k in dct} for _ in range(num_vals)]
 
     for lst_idx in range(num_vals):
         for key, val in dct.items():
-            new_lst[lst_idx][key_map[key]] = val[lst_idx]
+            new_lst[lst_idx][key_map.get(key, key)] = (
+                val if key in keep_singular else val[lst_idx]
+            )
 
     return new_lst
