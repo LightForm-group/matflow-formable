@@ -48,19 +48,19 @@ def build_load_case(load_case_specs):
                 **repeated_defaults,
             },
         },
-        'planar_2D': {
+        'planar_2d': {
             'func': load_cases.get_load_case_planar_2D,
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
         },
-        'random_2D': {
+        'random_2d': {
             'func': load_cases.get_load_case_random_2D,
             'func_returns_list': False,
             'length_identifier': 'total_times',
             'defaults': repeated_defaults,
         },
-        'random_3D': {
+        'random_3d': {
             'func': load_cases.get_load_case_random_3D,
             'func_returns_list': False,
             'length_identifier': 'total_times',
