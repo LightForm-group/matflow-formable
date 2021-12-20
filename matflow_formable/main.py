@@ -55,7 +55,7 @@ def fit_yield_function():
 def write_get_tensile_test_param_file(path, CSV_file_path, CSV_arguments,
                                       eng_stress_col_index, eng_strain_col_index,
                                       true_stress_col_index, true_strain_col_index,
-                                      stress_units):
+                                      stress_units, plastic_range):
     kwargs = {
         'CSV_file_path': CSV_file_path,
         'CSV_arguments': CSV_arguments,
@@ -64,6 +64,7 @@ def write_get_tensile_test_param_file(path, CSV_file_path, CSV_arguments,
         'true_stress_col_index': true_stress_col_index,
         'true_strain_col_index': true_strain_col_index,
         'stress_units': stress_units,
+        'plastic_range': plastic_range,
     }
     hickle.dump(kwargs, path)
 

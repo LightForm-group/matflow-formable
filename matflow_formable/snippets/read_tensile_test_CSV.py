@@ -6,7 +6,7 @@ from matflow.scripting import main_func
 @main_func
 def read_tensile_test_CSV(CSV_file_path, CSV_arguments, eng_stress_col_index,
                           eng_strain_col_index, true_stress_col_index,
-                          true_strain_col_index, stress_units):
+                          true_strain_col_index, stress_units, plastic_range):
 
     _, CSV_data = read_non_uniform_csv(
         CSV_file_path,
@@ -38,6 +38,7 @@ def read_tensile_test_CSV(CSV_file_path, CSV_arguments, eng_stress_col_index,
         eng_strain=eng_strain,
         true_stress=true_stress,
         true_strain=true_strain,
+        plastic_range=plastic_range,
     )
 
     tensile_test = tensile_test_obj.to_dict()
