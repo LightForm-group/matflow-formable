@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.12] - 2021.12.20
+
+### Added
+
+- Add `plastic_range` parameter to `get_tensile_test` task, which allows specifying the range of stress-strain data that should be considered in, for example, parameter fitting.
+
 ## [0.1.11] - 2021.11.09
 
 ### Added
