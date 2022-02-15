@@ -60,7 +60,7 @@ def optimise_SC_parameters_LM(single_crystal_parameters,
         tensile_tests = []
         for vol_elem_resp in all_vol_elem_resp:
             true_stress_tensor = vol_elem_resp['volume_data']['vol_avg_stress']['data']
-            true_stress = [calcVonMises(Tensor) for tensor in true_stress_tensor]
+            true_stress = [calcVonMises(tensor) for tensor in true_stress_tensor]
             true_strain = vol_elem_resp['volume_data']['vol_avg_equivalent_strain']['data']
             tensile_tests.append(
                 TensileTest(true_stress=true_stress, true_strain=true_strain)
