@@ -2,6 +2,7 @@ from matflow.scripting import main_func
 
 from formable.levenberg_marquardt import FittingParameter, LMFitterOptimisation, LMFitter
 from formable.tensile_test import TensileTest
+import numpy as np
 
 @main_func
 def optimise_SC_parameters_LM(single_crystal_parameters,
@@ -60,8 +61,9 @@ def optimise_SC_parameters_LM(single_crystal_parameters,
         tensile_tests = []
         for vol_elem_resp in all_vol_elem_resp:
             true_stress_tensor = vol_elem_resp['volume_data']['vol_avg_stress']['data']
-            true_stress = [calcVonMises(tensor) for tensor in true_stress_tensor]
-            true_strain = vol_elem_resp['volume_data']['vol_avg_equivalent_strain']['data']
+            true_stress = [VonMises(3/2,tensor) for tensor in true_stress_tensor]           
+            true_strain_tensor = vol_elem_resp['volume_data']['vol_avg_strain']['data']
+            true_strain = [VonMises(2/3,tensor) for tensor in true_strain_tensor]
             tensile_tests.append(
                 TensileTest(true_stress=true_stress, true_strain=true_strain)
         )
@@ -121,18 +123,38 @@ def get_by_path(root, path):
         sub_data = sub_data[key]
     
     return sub_data
+    
+    
+def HydroTensor(tensor):
+    """ Returns the hydrostatic tensor from an input stress strain tensor
+    
+    Parameters
+    ----------
+    tensor : (3,3) array
+    
+    Returns
+    -------
+    (3,3) array, hydrostatic stress on the diagonal of tensor with 0 in shear values
+    """
+    
+    return ((tensor[0,0]+tensor[1,1]+tensor[2,2])/3) * np.eye(3,3)
+    
+    
+def VonMises(s,tensor):
+    """ Returns the equivalent value of stress or strain tensor
+    
+    Parameters
+    ----------
+    tensor : (3,3) array
+    s : scaling factor, 3/2 for stress, 2/3 for strain
+    
+    Returns
+    -------
+    scalar equivalent value of tensor
+    """
+    DevTensor = tensor - HydroTensor(tensor)
 
-
-def calcVonMises(StressTensor):
+    return np.sqrt(s*np.sum(DevTensor**2.0))
     
-    S_11 = StressTensor[0,0]
-    S_12 = StressTensor[0,1]
-    S_13 = StressTensor[0,2]
-    S_22 = StressTensor[1,1]
-    S_23 = StressTensor[1,2]
-    S_33 = StressTensor[2,2]
     
-    # von mises stress equation 
-    Stress_Vm = np.sqrt(0.5*((S_11 - S_22)**2 + (S_22 - S_33)**2 + (S_33 - S_11)**2) + 3*(S_12**2 + S_23**2 + S_13**2))
-    
-    return Stress_Vm
+ 
