@@ -9,4 +9,4 @@ This extension generates Python scripts that require the following Python packag
 
 - [formable](https://github.com/LightForm-group/formable)
 - [hickle](https://github.com/telegraphic/hickle) (version >=4.0.1)
-
+- numpy
