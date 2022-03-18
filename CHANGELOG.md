@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.13] - 2022.03.18
+
+### Changed
+
+- In snippet `optimise_SC_parameters_LM`, use VonMises(volume-averaged stress/strain) instead of volume-averaged(VonMises stress/strain).
+
 ## [0.1.12] - 2021.12.20
 
 ### Added
