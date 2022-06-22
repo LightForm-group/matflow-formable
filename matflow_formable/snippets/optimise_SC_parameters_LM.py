@@ -71,15 +71,12 @@ def optimise_SC_parameters_LM(
         tensile_tests = []
         for vol_elem_resp in all_vol_elem_resp:
             true_stress_tensor = vol_elem_resp["volume_data"]["vol_avg_stress"]["data"]
-            true_stress = [
-                get_von_mises(3 / 2, tensor) for tensor in true_stress_tensor
-            ]
             true_strain_tensor = vol_elem_resp["volume_data"]["vol_avg_strain"]["data"]
-            true_strain = [
-                get_von_mises(2 / 3, tensor) for tensor in true_strain_tensor
-            ]
             tensile_tests.append(
-                TensileTest(true_stress=true_stress, true_strain=true_strain)
+                TensileTest(
+                    true_stress=get_von_mises_stress(true_stress_tensor),
+                    true_strain=get_von_mises_strain(true_strain_tensor),
+                )
             )
 
         # Need to reorder if null-perturbation is not first:
@@ -146,14 +143,19 @@ def get_hydrostatic_tensor(tensor):
 
     Parameters
     ----------
-    tensor : (3,3) array
+    tensor : ndarray of shape array (..., 3, 3)
 
     Returns
     -------
-    (3,3) array, hydrostatic stress on the diagonal of tensor with 0 in shear values
+    (..., 3, 3) array hydrostatic stress on the diagonal of tensor with 0 in shear values
+
     """
 
-    return ((tensor[0, 0] + tensor[1, 1] + tensor[2, 2]) / 3) * np.eye(3, 3)
+    hydro = np.zeros_like(tensor)
+    hydro[..., [0, 1, 2], [0, 1, 2]] = (np.trace(tensor, axis1=-2, axis2=-1) / 3)[
+        ..., None
+    ]
+    return hydro
 
 
 def get_von_mises(s, tensor):
@@ -161,13 +163,25 @@ def get_von_mises(s, tensor):
 
     Parameters
     ----------
-    tensor : (3,3) array
-    s : scaling factor, 3/2 for stress, 2/3 for strain
+    tensor : ndarray of shape (..., 3, 3)
+        Tensor of which to get the von Mises equivalent.
+    s : float
+        Scaling factor: 3/2 for stress, 2/3 for strain.
 
     Returns
     -------
-    scalar equivalent value of tensor
+    Von Mises equivalent value of tensor.
+
     """
+
     deviatoric = tensor - get_hydrostatic_tensor(tensor)
 
-    return np.sqrt(s * np.sum(deviatoric**2.0))
+    return np.sqrt(s * np.sum(deviatoric**2.0, axis=(-2, -1)))
+
+
+def get_von_mises_stress(stress):
+    return get_von_mises(3 / 2, stress)
+
+
+def get_von_mises_strain(strain):
+    return get_von_mises(2 / 3, strain)
