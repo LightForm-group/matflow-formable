@@ -68,14 +68,16 @@ def optimise_SC_parameters_LM(
     tensile_tests_by_iteration = []
     for iteration_idx, all_vol_elem_resp in perturbed_volume_element_responses.items():
 
+        # take x-normal component of tensors; comparable to experimental data
+        # TODO: allow for non-x-direction and more generally rotated load cases
         tensile_tests = []
         for vol_elem_resp in all_vol_elem_resp:
             true_stress_tensor = vol_elem_resp["volume_data"]["vol_avg_stress"]["data"]
             true_strain_tensor = vol_elem_resp["volume_data"]["vol_avg_strain"]["data"]
             tensile_tests.append(
                 TensileTest(
-                    true_stress=get_von_mises_stress(true_stress_tensor),
-                    true_strain=get_von_mises_strain(true_strain_tensor),
+                    true_stress=true_stress_tensor[..., 0, 0],
+                    true_strain=true_strain_tensor[..., 0, 0],
                 )
             )
 
