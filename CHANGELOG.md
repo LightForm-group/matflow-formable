@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.14] - 2022.08.08
+
+### Changed
+
+- Use x-direction normal stress/strain in single crystal parameter optimisation instead of Von Mises to better align with experimental data
+- Use VonMises(VolumeAverage) in yield function fitting `equivalent_plastic_strain` measure instead of VolumeAverage(VonMises).
+
 ## [0.1.13] - 2022.03.18
 
 ### Changed
