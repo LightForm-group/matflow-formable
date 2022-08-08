@@ -40,7 +40,7 @@ def fit_yield_function(
         uniaxial_response["volume_data"]["vol_avg_plastic_strain"]["data"]
     )
     uni_resp = LoadResponse(
-        true_stress=uniaxial_response["volume_data"]["vol_avg_stress"]["data"],
+        stress=uniaxial_response["volume_data"]["vol_avg_stress"]["data"],
         equivalent_plastic_strain=eq_vol_avg_plastic_strain,
     )
     multi_resp = []
@@ -50,7 +50,7 @@ def fit_yield_function(
         )
         multi_resp.append(
             LoadResponse(
-                true_stress=resp_dat["volume_data"]["vol_avg_stress"]["data"],
+                stress=resp_dat["volume_data"]["vol_avg_stress"]["data"],
                 equivalent_plastic_strain=eq_vol_avg_plastic_strain_i,
             )
         )
